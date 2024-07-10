@@ -4,8 +4,10 @@ import com.practica.api.model.DatosEpisodio;
 import com.practica.api.model.DatosSerie;
 import com.practica.api.model.DatosTemporadas;
 import com.practica.api.principal.Principal;
+import com.practica.api.repository.SerieRepository;
 import com.practica.api.service.ConsumoAPI;
 import com.practica.api.service.ConvierteDatos;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,6 +17,8 @@ import java.util.List;
 
 @SpringBootApplication
 public class ApiApplication implements CommandLineRunner {
+	@Autowired
+	private SerieRepository repository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiApplication.class, args);
@@ -34,7 +38,7 @@ public class ApiApplication implements CommandLineRunner {
 		DatosEpisodio episodios = conversor.obtenerDatos(json, DatosEpisodio.class);
 		System.out.println(episodios);
 		 */
-		Principal principal = new Principal();
+		Principal principal = new Principal(repository);
 		principal.muestraMenu();
 	}
 }
