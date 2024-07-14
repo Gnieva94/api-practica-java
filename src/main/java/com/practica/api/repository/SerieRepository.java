@@ -1,5 +1,6 @@
 package com.practica.api.repository;
 
+import com.practica.api.dto.EpisodioDTO;
 import com.practica.api.model.Categoria;
 import com.practica.api.model.Episodio;
 import com.practica.api.model.Serie;
@@ -22,4 +23,6 @@ public interface SerieRepository extends JpaRepository<Serie,Long> {
     List<Episodio> top5Episodios(Serie serie);
     @Query("SELECT s FROM Serie s JOIN s.listaEpisodios e GROUP BY s ORDER BY MAX(e.fechaLanzamiento) DESC LIMIT 5")
     List<Serie> lanzamientosMasRecientes();
+    @Query("SELECT e FROM Serie s JOIN s.listaEpisodios e WHERE s.Id = :id AND e.temporada = :numTemporada ")
+    List<Episodio> getTemporadasbyNumero(Long id, Long numTemporada);
 }

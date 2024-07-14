@@ -1,6 +1,8 @@
 package com.practica.api.service;
 
+import com.practica.api.dto.EpisodioDTO;
 import com.practica.api.dto.SerieDTO;
+import com.practica.api.model.Categoria;
 import com.practica.api.model.Serie;
 import com.practica.api.repository.SerieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +40,28 @@ public class SerieService {
         }else{
             return null;
         }
+    }
+
+    public List<EpisodioDTO> getAllTemporadas(Long id) {
+        Optional<Serie> serie =  repository.findById(id);
+        if(serie.isPresent()){
+            Serie s = serie.get();
+            return s.getListaEpisodios().stream()
+                    .map(e -> new EpisodioDTO(e.getTemporada(),e.getTitulo(),e.getNumeroEpisodio()))
+                    .collect(Collectors.toList());
+        }else{
+            return null;
+        }
+    }
+
+    public List<EpisodioDTO> getTemporadasbyNumero(Long id, Long numTemporada) {
+        return repository.getTemporadasbyNumero(id,numTemporada).stream()
+                .map(e -> new EpisodioDTO(e.getTemporada(),e.getTitulo(),e.getNumeroEpisodio()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SerieDTO> getSeriesByCategory(String nombreGenero) {
+        Categoria categoria = Categoria.fromEspanol(nombreGenero);
+        return convierteDatos(repository.findByGenero(categoria));
     }
 }
